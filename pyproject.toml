@@ -41,8 +41,8 @@ test = [
 find = {}  # Scan the project directory with the default parameters
 
 [project.urls]
-"Homepage" = "https://github.com/pypa/psga"
-"Bug Tracker" = "https://github.com/pypa/psga/issues"
+"Homepage" = "https://github.com/aptly-io/psga"
+"Bug Tracker" = "https://github.com/aptly-io/psga/issues"
 
 [tool.coverage.run]
 branch = true
