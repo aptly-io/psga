@@ -1,0 +1,80 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "psga"
+version = "0.0.1"
+authors = [
+  { name="F M", email="psga@mikmak.fun" },
+]
+description = "A minimalistic PySimpleGUI controller"
+readme = "README.md"
+requires-python = ">=3.8.1"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11"
+]
+dependencies = [
+    "PySimpleGUI",
+]
+
+[project.optional-dependencies]
+test = [
+    "isort",
+    "black",
+    "pylint",
+    "pytest",
+    "pytest-mock",
+    "pytest-cov",
+    "build",
+    "twine",
+]
+
+[tool.setuptools.packages]
+find = {}  # Scan the project directory with the default parameters
+
+[project.urls]
+"Homepage" = "https://github.com/pypa/psga"
+"Bug Tracker" = "https://github.com/pypa/psga/issues"
+
+[tool.coverage.run]
+branch = true
+source = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "--cov src --cov-report=lcov:lcov.info --cov-report=term --cov-report xml:coverage.xml --cov-fail-under 0"
+pythonpath = "src" 
+
+[tool.black]
+target-version = ['py311']
+line-length = 100
+fast = true
+
+[tool.isort]
+py_version=311
+line_length = 100
+profile = "black"
+
+[tool.pylint.main]
+# Specify a score threshold under which the program will exit with error.
+fail-under = 9.0
+
+[tool.pylint.format]
+# Maximum number of characters on a single line.
+max-line-length = 100
+
+[tool.ruff]
+line-length = 100
+
+[tool.pylint.'MISCELLANEOUS']
+notes = [ "FIXME" ]
+
+[tool.coverage.report]
+fail_under = 100
