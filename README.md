@@ -1,5 +1,16 @@
 # PySimpleGUI's Actions (PSGA)
 
+<p align="center">
+
+<a href="https://github.com/aptly-io/psga/actions">
+  <img alt="Actions Status" src="https://github.com/aptly-io/psga/actions/workflows/CI.yaml/badge.svg">
+</a>
+
+![GitHub](https://img.shields.io/github/license/aptly-io/psga?style=for-the-badge)
+
+</p>
+
+
 ## Intro
 
 PySimpleGUI is like the _View_ in the _Model-View-Controller_ paradigm.
