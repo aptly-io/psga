@@ -8,7 +8,7 @@
 <a href="https://pypi.org/project/psga/">
   <img alt="License" src="https://img.shields.io/pypi/l/psga.svg">
 </a>
-
+[![PyPi Version](https://img.shields.io/pypi/v/psga.svg)](https://pypi.python.org/pypi/psga/)
 </p>
 
 
