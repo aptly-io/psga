@@ -3,7 +3,8 @@
 """Minimalistic Controller (as in the MVC paradigm) for PySimpleGUI."""
 
 import functools
-from typing import Callable, Dict, Protocol, Self
+from typing import Callable, Dict, Protocol
+from typing_extensions import Self
 
 import PySimpleGUI as sg
 
