@@ -4,9 +4,9 @@
 
 import functools
 from typing import Callable, Dict, Optional, Protocol
-from typing_extensions import Self
 
 import PySimpleGUI as sg
+from typing_extensions import Self
 
 
 class Action(Protocol):
