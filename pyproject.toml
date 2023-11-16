@@ -23,6 +23,7 @@ classifiers = [
 ]
 dependencies = [
     "PySimpleGUI",
+    "typing_extensions",
 ]
 
 [project.optional-dependencies]

@@ -5,8 +5,9 @@
 <a href="https://github.com/aptly-io/psga/actions">
   <img alt="Actions Status" src="https://github.com/aptly-io/psga/actions/workflows/CI.yaml/badge.svg">
 </a>
-
-![GitHub](https://img.shields.io/github/license/aptly-io/psga?style=for-the-badge)
+<a href="https://pypi.org/project/psga/">
+  <img alt="License" src="https://img.shields.io/pypi/l/psga.svg">
+</a>
 
 </p>
 

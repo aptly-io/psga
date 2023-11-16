@@ -3,9 +3,10 @@
 """Minimalistic Controller (as in the MVC paradigm) for PySimpleGUI."""
 
 import functools
-from typing import Callable, Dict, Protocol, Self
+from typing import Callable, Dict, Optional, Protocol
 
 import PySimpleGUI as sg
+from typing_extensions import Self
 
 
 class Action(Protocol):
@@ -17,7 +18,7 @@ class Action(Protocol):
         """"""
 
 
-def action(key: str | None = None):
+def action(key: Optional[str] = None):
     """Turns an event handler into an action using given key as event's name"""
 
     action._counter = getattr(action, "_counter", 0) + 1
@@ -80,7 +81,7 @@ class Dispatcher:
 class Controller:
     """Groups and registers actions to a dispatcher."""
 
-    def __init__(self, dispatcher: Dispatcher, window: sg.Window | None = None):
+    def __init__(self, dispatcher: Dispatcher, window: Optional[sg.Window] = None):
         self.window = window
         for method in [
             func
