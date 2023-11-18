@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "psga"
-version = "0.0.2"
+version = "0.0.4"
 authors = [
   { name="F M", email="psga@mikmak.fun" },
 ]
@@ -19,7 +19,10 @@ classifiers = [
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11"
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Framework :: PySimpleGUI",
+    "Framework :: PySimpleGUI :: 4"
 ]
 dependencies = [
     "PySimpleGUI",
@@ -38,8 +41,8 @@ test = [
     "twine",
 ]
 
-[tool.setuptools.packages]
-find = {}  # Scan the project directory with the default parameters
+[tool.setuptools]
+package-dir = { "" = "src" }
 
 [project.urls]
 "Homepage" = "https://github.com/aptly-io/psga"
