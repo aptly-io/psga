@@ -1,16 +1,9 @@
-# PySimpleGUI's Actions (PSGA)
+# PySimpleGUI's Actions (PSGA) for smart event handling
 
 <p align="center">
-
-<a href="https://github.com/aptly-io/psga/actions">
-  <img alt="Actions Status" src="https://github.com/aptly-io/psga/actions/workflows/CI.yaml/badge.svg">
-</a>
-<a href="https://pypi.org/project/psga/">
-  <img alt="License" src="https://img.shields.io/pypi/l/psga.svg">
-</a>
-<a href="https://pypi.python.org/pypi/psga/">
-  <img alt="PyPi Version" src="https://img.shields.io/pypi/v/psga.svg">
-</a>
+<a href="https://github.com/aptly-io/psga/actions"><img alt="Actions Status" src="https://github.com/aptly-io/psga/actions/workflows/CI.yaml/badge.svg"></a>
+<a href="https://pypi.org/project/psga/"><img alt="License" src="https://img.shields.io/pypi/l/psga.svg"></a>
+<a href="https://pypi.python.org/pypi/psga/"><img alt="PyPi Version" src="https://img.shields.io/pypi/v/psga.svg"></a>
 </p>
 
 
@@ -19,21 +12,30 @@
 PySimpleGUI is like the _View_ in the _Model-View-Controller_ paradigm.
 For less complex user interfaces its typical if-event-then-action loop
 (that takes the role of _Controller_) works fine.
-However this event-loop approach becomes unwieldy for larger user interfaces.
+However this event-loop approach becomes unwieldy to maintain
+for larger user interfaces.
 
 PSGA tries to mitigate this by adding the following:
-- The `@psga.action()` decorator turns a method or function into an `Action`.
-  An action wraps both the handler and a key to respectively handle and name the event.
-- A `Controller` class groups a bunch of handlers for processing
-  user input and updating the corresponding views.
+- The `@psga.action()` decorator turns a method (or function) in an `Action`.
+  This action wraps both a handler and a event name (key)
+  to respectively handle and name the event.
+- A `Controller` class groups and registers related handlers for processing
+  user input and updating the corresponding view.
+  Using controllers the source code becomes more maintainable and structured.
 - A `Dispatcher` class has a loop that reads the events from a `sg.Window`.
   Each event's value is then dispatched to the handler
   that was prior registered by the `Controller`('s).
+  Manual registering is also possible (see the example).
 
-The MVC's _Model_ is still for the developer to design and implement.
+It is easy to gradually refactor existing source code with the _PSGA_ feature.
+The _Model_ of the MVC is still for the developer to design and implement.
 
-Note that PySimpleGUI tries to get away with the _call-back_ and _classes_.
-But in a way, PSGA brings these back with the _action handler_.
+Note:
+- PySimpleGUI states in its documentation to get away with difficult concepts like _call-backs_, _classes_...
+  In a way, `action` and `Controller` brings that back (so you might not like this).
+- While this module and python-tkinter have respectively a MIT or BSD license _type_,
+  PySimpleGUI is LGPL.
+
 
 ## Examples
 
@@ -72,7 +74,45 @@ psga.Dispatcher().register(on_ok).loop(window)
 window.close()
 ```
 
+
+### Example with a Controller
+
+It's not very functional (completely independent from PySimpleGUI).
+But it illustrates the use of a `Controller` in combination with
+the `action` decorator and `Dispatcher`.
+
+```python
+from psga import Controller, Dispatcher, action
+
+class _MyController(Controller):
+    answer = 0
+
+    @action(key="universal_question")
+    def on_ask(self, values):
+        """with explicit key"""
+        _MyController.answer = values
+
+    @action()
+    def on_answer(self, values):
+        """with implicit key"""
+        _MyController.answer = values
+
+
+dispatcher = Dispatcher()
+controller = _MyController(dispatcher)
+
+dispatcher.dispatch("universal_question", 42)
+assert controller.answer == 42
+
+QUESTION = "Answer to the Ultimate Question of Life"
+dispatcher.dispatch(controller.on_answer.key, QUESTION)
+assert controller.answer == QUESTION
+```
+
+
 ## For development
+
+Illustrates how to setup for _PSGA_ development.
 
 ```bash
 python3.11 -mvenv .venv
@@ -84,27 +124,25 @@ pip install -e .
 # optionally install test features
 pip install -e .[test]
 
-# format & lint the code
+# format, lint and test the code
 isort demos tests src
 black demos tests src
-
 pylint src
-
-# execute the tests
 pytest
 
-# run the demo
+# run the demos
 export PYTHONPATH=src
 python demos/hello_world.py
+python demos/no_ui.py
 
-# build the wheel
+# build the wheel and upload to pypi.org (uses credentials in ~/.pypirc)
+rm -rf dist/
 python -m build
-
-# check the build
 twine check --strict dist/*
+twine upload dist/*
 ```
 
-Note install tkinter separately on MacOS with brew:
+Note that on Mac OS one needs to install tkinter separately with _brew_:
 
 ```bash
 brew install python-tk@3.11

@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "psga"
-version = "0.0.4"
+version = "0.0.5"
 authors = [
   { name="F M", email="psga@mikmak.fun" },
 ]
-description = "A minimalistic PySimpleGUI controller"
+description = "Smarter event handling for PySimpleGUI"
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
