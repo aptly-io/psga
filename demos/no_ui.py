@@ -8,14 +8,14 @@ from psga import Controller, Dispatcher, action
 class _MyController(Controller):
     answer = 0
 
-    @action(key="universal_question")
+    @action(name="universal_question")
     def on_ask(self, values):
-        """with explicit key"""
+        """with explicit name"""
         _MyController.answer = values
 
     @action()
     def on_answer(self, values):
-        """with implicit key"""
+        """with implicit name"""
         _MyController.answer = values
 
 
@@ -27,5 +27,5 @@ dispatcher.dispatch("universal_question", 42)
 assert controller.answer == 42
 
 QUESTION = "Answer to the Ultimate Question of Life"
-dispatcher.dispatch(controller.on_answer.key, QUESTION)
+dispatcher.dispatch(controller.on_answer.name, QUESTION)
 assert controller.answer == QUESTION

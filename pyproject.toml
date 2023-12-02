@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "psga"
-version = "0.0.5"
+version = "0.0.6"
 authors = [
   { name="F M", email="psga@mikmak.fun" },
 ]
@@ -53,7 +53,7 @@ branch = true
 source = ["src"]
 
 [tool.pytest.ini_options]
-addopts = "--cov src --cov-report=lcov:lcov.info --cov-report=term --cov-report xml:coverage.xml --cov-fail-under 0"
+addopts = "--log-cli-level=10 --cov src --cov-report=lcov:lcov.info --cov-report=term --cov-report xml:coverage.xml --cov-fail-under 0"
 pythonpath = "src" 
 
 [tool.black]
