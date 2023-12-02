@@ -3,6 +3,7 @@
 """Minimalistic Controller (as in the MVC paradigm) for PySimpleGUI."""
 
 import functools
+import logging
 from typing import Callable, Dict, Optional, Protocol
 
 import PySimpleGUI as sg
@@ -63,11 +64,10 @@ class Dispatcher:
             return True
         return False
 
-    def loop(self, window: sg.Window):
-        """Process window's events and values until the Exit event."""
+        log = logging.getLogger("PSGA")
         while True:
             event, values = window.read()
-            print(f"#### LOOP event: {event} values: {values}\n")
+            log.debug("event %s, values: %s", event, values)
 
             if event in {sg.WIN_CLOSED, "Exit"}:
                 break
@@ -75,7 +75,7 @@ class Dispatcher:
             if self.dispatch(event, values):
                 continue
 
-            print(f"Unhandled event: {event}, values: {values}")
+            log.warning("Unhandled event: %s", event)
 
 
 class Controller:
