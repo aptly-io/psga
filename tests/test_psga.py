@@ -1,3 +1,4 @@
+import logging
 from typing import Callable
 from unittest.mock import MagicMock
 
@@ -92,31 +93,59 @@ def test_controller():
 
 
 def test_dispatcher_loop():
-    mock_window = MagicMock(return_value=[("Ok", {}), ("Exit", {})])
+    logging.getLogger("PSGA").setLevel(logging.DEBUG)
 
     mock_window = MagicMock()
     mock_window.configure_mock(
         **{
             "read.side_effect": [
-                ("Ok", {}),
-                ("Unknown", {}),
-                (("-UNKNOWN TABLE KEY-", "+CICKED+", (3, 3)), {}),
-                ("Unknown menu::unknown_menu_key", {}),
-                ("Exit", {}),
+                ("Ok", {1:1}),
+                ("Unknown", {2:2}),
+                ("Unregistered", {3:3}),
+                (("-TABLE KEY-", "+CLICKED+", (3, 3)), {4:4}),
+                ("Unknown menu::menu_key", {5:5}),
+                ("Exit", {6:6}),
             ],
         }
     )
 
     handler1_invoked = 0
+    handler2_invoked = 0
+    handler3_invoked = 0
+    handler4_invoked = 0
 
     @psga.action(key="Ok")
-    def hander1(_):
+    def handler1(values):
         nonlocal handler1_invoked
         handler1_invoked += 1
+        assert values == {1:1}
+
+    @psga.action(key="Unregistered")
+    def handler4(values):
+        nonlocal handler4_invoked
+        handler4_invoked += 1
+        assert values == {3:3}
+
+    @psga.action(key="-TABLE KEY-")
+    def handler2(values):
+        nonlocal handler2_invoked
+        handler2_invoked += 1
+        assert values == {4:4}
+
+    @psga.action(key="menu_key")
+    def handler3(values):
+        nonlocal handler3_invoked
+        handler3_invoked += 1
+        assert values == {5:5}
 
     dispatcher = psga.Dispatcher()
-    dispatcher.register(hander1)
+    dispatcher.register(handler1)
+    dispatcher.register(handler2)
+    dispatcher.register(handler3)
 
     dispatcher.loop(mock_window)
 
     assert handler1_invoked == 1
+    assert handler2_invoked == 1
+    assert handler3_invoked == 1
+    assert handler4_invoked == 0
