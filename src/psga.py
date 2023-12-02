@@ -66,9 +66,11 @@ class Dispatcher:
             return True
         return False
 
+    def loop(self, window: sg.Window, timeout_ms=None, timeout_key=sg.TIMEOUT_KEY):
+        """Process window's events and values until the Exit event or given timeout"""
         log = logging.getLogger("PSGA")
         while True:
-            event, values = window.read()
+            event, values = window.read(timeout_ms, timeout_key)
             log.debug("event %s, values: %s", event, values)
 
             if event in {sg.WIN_CLOSED, "Exit"}:
