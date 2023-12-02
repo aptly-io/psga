@@ -17,10 +17,10 @@ for larger user interfaces.
 
 PSGA tries to mitigate this by adding the following:
 - The `@psga.action()` decorator turns a method (or function) in an `Action`.
-  This action wraps both a handler and a event name (key)
+  This action wraps both a handler and a event name (`name`)
   to respectively handle and name the event.
 - A `Controller` class groups and registers related handlers for processing
-  user input and updating the corresponding view.
+  user interaction and updating the corresponding view.
   Using controllers the source code becomes more maintainable and structured.
 - A `Dispatcher` class has a loop that reads the events from a `sg.Window`.
   Each event's value is then dispatched to the handler
@@ -55,7 +55,7 @@ import PySimpleGUI as sg
 import psga
 
 # PSGA: define an action for the Ok button
-@psga.action(key="Ok")
+@psga.action(name="Ok")
 def on_ok(values):
     print('You entered ', values[0])
 
@@ -77,7 +77,7 @@ window.close()
 
 ### Example with a Controller
 
-It's not very functional (completely independent from PySimpleGUI).
+It's not very functional (without using any PySimpleGUI functionality).
 But it illustrates the use of a `Controller` in combination with
 the `action` decorator and `Dispatcher`.
 
@@ -87,14 +87,14 @@ from psga import Controller, Dispatcher, action
 class _MyController(Controller):
     answer = 0
 
-    @action(key="universal_question")
+    @action(name="universal_question")
     def on_ask(self, values):
-        """with explicit key"""
+        """with explicit name"""
         _MyController.answer = values
 
     @action()
     def on_answer(self, values):
-        """with implicit key"""
+        """with implicit name"""
         _MyController.answer = values
 
 
@@ -105,7 +105,7 @@ dispatcher.dispatch("universal_question", 42)
 assert controller.answer == 42
 
 QUESTION = "Answer to the Ultimate Question of Life"
-dispatcher.dispatch(controller.on_answer.key, QUESTION)
+dispatcher.dispatch(controller.on_answer.name, QUESTION)
 assert controller.answer == QUESTION
 ```
 

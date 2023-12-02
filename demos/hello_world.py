@@ -7,7 +7,7 @@ import psga
 
 # PSGA: define an action for the Ok button
 @psga.action()
-# PSGA: The action generates a unique key value (if the decorator has no explicit key argument)
+# PSGA: The action generates a unique name value (if the decorator has no explicit name argument)
 def _on_ok(values):
     # PSGA: The action has a handler: simply print a value
     print("You entered ", values[0])
@@ -20,8 +20,8 @@ layout = [
     [sg.Text("Enter something on Row 2"), sg.InputText()],
     [
         sg.Button("Exit"),
-        # PSGA: assign the action's key value to the element (with intellisense no typo mismatches)
-        sg.Button("Ok", key=_on_ok.key),
+        # PSGA: assign the action's name value to the element (with intellisense no typo mismatches)
+        sg.Button("Ok", key=_on_ok.name),
     ],
 ]
 
