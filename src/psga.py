@@ -4,7 +4,7 @@
 
 import functools
 import logging
-from typing import Callable, Dict, Optional, Protocol
+from typing import Callable, Dict, Hashable, List, Optional, Protocol
 
 import PySimpleGUI as sg
 from typing_extensions import Self
@@ -16,12 +16,13 @@ class Action(Protocol):
     # pylint: disable=too-few-public-methods
 
     name: str
+    keys: Optional[List[Hashable]]
 
     def __call__(self, values=None):
         """"""
 
 
-def action(name: Optional[str] = None):
+def action(name: Optional[str] = None, keys: Optional[List[Hashable]] = None):
     """Turns an event handler into an action using given name as event's name"""
     # pylint: disable=protected-access
 
@@ -35,6 +36,7 @@ def action(name: Optional[str] = None):
         _wrapper_action.name = (
             handler.__name__ + "_" + str(action._counter) if name is None else name
         )
+        _wrapper_action.keys = keys
 
         return _wrapper_action
 
@@ -48,8 +50,11 @@ class Dispatcher:
         self._handlers: Dict[str, Action] = {}
 
     def register(self, handler: Action) -> Self:
-        """Registers given action's handler by its name."""
+        """Registers given action's handler by its name and keys."""
         self._handlers.setdefault(handler.name, []).append(handler)
+        if handler.keys is not None:
+            for key in handler.keys:
+                self._handlers.setdefault(key, []).append(handler)
         return self
 
     def dispatch(self, event, values) -> bool:

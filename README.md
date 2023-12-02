@@ -1,4 +1,4 @@
-# PySimpleGUI's Actions (PSGA) for smart event handling
+# PySimpleGUI's Actions (PSGA) simplify event handling
 
 <p align="center">
 <a href="https://github.com/aptly-io/psga/actions"><img alt="Actions Status" src="https://github.com/aptly-io/psga/actions/workflows/CI.yaml/badge.svg"></a>
@@ -12,29 +12,27 @@
 PySimpleGUI is like the _View_ in the _Model-View-Controller_ paradigm.
 For less complex user interfaces its typical if-event-then-action loop
 (that takes the role of _Controller_) works fine.
-However this event-loop approach becomes unwieldy to maintain
-for larger user interfaces.
+However the event-loop's if-then-else becomes difficult to maintain
+for user interfaces with a large number of elements.
 
 PSGA tries to mitigate this by adding the following:
 - The `@psga.action()` decorator turns a method (or function) in an `Action`.
   This action wraps both a handler and a event name (`name`)
-  to respectively handle and name the event.
+  to respectively handle and name the event (recognized by intellisense).
+  The optional `keys` decorator parameter allows for additional keys to invoke the handler.
 - A `Controller` class groups and registers related handlers for processing
   user interaction and updating the corresponding view.
-  Using controllers the source code becomes more maintainable and structured.
+  This could hold your business/logic state.
+  Using controllers the source code is more maintainable, structured.
 - A `Dispatcher` class has a loop that reads the events from a `sg.Window`.
   Each event's value is then dispatched to the handler
-  that was prior registered by the `Controller`('s).
-  Manual registering is also possible (see the example).
+  that was prior registered by its `Controller`('s).
+  Manual registering is also possible (see the examples).
 
 It is easy to gradually refactor existing source code with the _PSGA_ feature.
-The _Model_ of the MVC is still for the developer to design and implement.
 
-Note:
-- PySimpleGUI states in its documentation to get away with difficult concepts like _call-backs_, _classes_...
-  In a way, `action` and `Controller` brings that back (so you might not like this).
-- While this module and python-tkinter have respectively a MIT or BSD license _type_,
-  PySimpleGUI is LGPL.
+PySimpleGUI avoids concepts like _call-backs_, _classes_...
+In a way, `action` and `Controller` brings that back (so you might not like PSGA's concept).
 
 
 ## Examples
@@ -45,10 +43,10 @@ PySimpleGUI shows the classic _hello world_ in its [Jump-Start section](https://
 
 The source code below illustrates how PSGA _could_ fit in:
 1. Define a function that acts when the _Ok_ button is clicked.
-2. Instantiate the dispatcher that triggers the handler when the _Ok_ event is found.
+2. Instantiate the dispatcher that will trigger the handler whenever the _Ok_ event is fired.
 
 Note that this simple example does not use a `Controller`.
-Note that the `demos/hello_world.py` example does the same but slightly different.
+Note that the `demos/hello_world.py` example does the same in a slightly different way.
 
 ```python
 import PySimpleGUI as sg
@@ -77,9 +75,9 @@ window.close()
 
 ### Example with a Controller
 
-It's not very functional (without using any PySimpleGUI functionality).
-But it illustrates the use of a `Controller` in combination with
-the `action` decorator and `Dispatcher`.
+It shows PSGA's concept without using any PySimpleGUI functionality.
+It illustrates the use of a `Controller` in combination with
+the `action` decorator and a `Dispatcher`.
 
 ```python
 from psga import Controller, Dispatcher, action
