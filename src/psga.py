@@ -12,6 +12,7 @@ from typing_extensions import Self
 
 class Action(Protocol):
     """Bundles the event's name and handler"""
+    # pylint: disable=too-few-public-methods
 
     key: str
 
@@ -21,6 +22,7 @@ class Action(Protocol):
 
 def action(key: Optional[str] = None):
     """Turns an event handler into an action using given key as event's name"""
+    # pylint: disable=protected-access
 
     action._counter = getattr(action, "_counter", 0) + 1
 
@@ -80,6 +82,7 @@ class Dispatcher:
 
 class Controller:
     """Groups and registers actions to a dispatcher."""
+    # pylint: disable=too-few-public-methods
 
     def __init__(self, dispatcher: Dispatcher, window: Optional[sg.Window] = None):
         self.window = window
