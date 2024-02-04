@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "psga"
-version = "0.0.6"
+version = "0.0.7"
 authors = [
   { name="F M", email="psga@mikmak.fun" },
 ]
@@ -39,6 +39,11 @@ test = [
     "pytest-cov",
     "build",
     "twine",
+]
+demo = [
+    "fastapi==0.109.1",
+    "pydantic==2.6.0",
+    "uvicorn==0.27.0.post1"
 ]
 
 [tool.setuptools]
