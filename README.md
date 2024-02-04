@@ -6,24 +6,44 @@
 <a href="https://pypi.python.org/pypi/psga/"><img alt="PyPi Version" src="https://img.shields.io/pypi/v/psga.svg"></a>
 </p>
 
+## install
+
+```bash
+python3 -mpip install psga
+```
+
+To run the demo, checkout the repository and install the required modules:
+
+```bash
+git clone https://github.com/aptly-io/psga.git
+cd psga
+python3 -mvenv .venv
+. .venv/bin/activate
+python3 -mpip install -e .
+python3 -mpip install -e .[demo]
+
+python demos/tabs_and_tables/main.py 
+```
 
 ## Intro
 
 PySimpleGUI is like the _View_ in the _Model-View-Controller_ paradigm.
-For less complex user interfaces its typical if-event-then-action loop
-(that takes the role of _Controller_) works fine.
+For less complex user interfaces, PySimpleGui's typical _if-event then-action loop_
+(that is a bit a _Controller_), works fine.
 However the event-loop's if-then-else becomes difficult to maintain
 for user interfaces with a large number of elements.
 
-PSGA tries to mitigate this by adding the following:
-- The `@psga.action()` decorator turns a method (or function) in an `Action`.
-  This action wraps both a handler and a event name (`name`)
-  to respectively handle and name the event (recognized by intellisense).
-  The optional `keys` decorator parameter allows for additional keys to invoke the handler.
+_PSGA_ mitigates this by adding the following:
+- The `@psga.action()` decorator turns a python method (or function) in an `Action`.
+  This action wraps both the handler and an event name (accessible through the property `name`)
+  to respectively handle and name the PySimpleGui event.
+  Since VSC's intellisense recognizes this `name` property,
+  are typo errors in the PySimpleGui's `key` less likely to happen.
+  The optional `keys` decorator parameter allows for additional keys that invoke the associated handler.
 - A `Controller` class groups and registers related handlers for processing
   user interaction and updating the corresponding view.
   This could hold your business/logic state.
-  Using controllers the source code is more maintainable, structured.
+  With a `Controller` the source code becomes more maintainable and structured.
 - A `Dispatcher` class has a loop that reads the events from a `sg.Window`.
   Each event's value is then dispatched to the handler
   that was prior registered by its `Controller`('s).
@@ -31,22 +51,27 @@ PSGA tries to mitigate this by adding the following:
 
 It is easy to gradually refactor existing source code with the _PSGA_ feature.
 
-PySimpleGUI avoids concepts like _call-backs_, _classes_...
-In a way, `action` and `Controller` brings that back (so you might not like PSGA's concept).
+Note that PySimpleGUI's documentation mentions it avoids concepts like _call-backs_, _classes_...
+_PSGA_, with its `action` and `Controller` brings that back (so you might not like _PSGA_'s concepts?).
 
 
 ## Examples
 
+All examples are sprinkled with comments to highlight _PSGA_'s usage.
+Grep for `# PSGA: ` to find these.
+
+
 ### Hello world
 
-PySimpleGUI shows the classic _hello world_ in its [Jump-Start section](https://www.pysimplegui.org/en/latest/).
+PySimpleGUI shows the classic _hello world_ in its [Jump-Start section](https://www.PySimpleGui.org/en/latest/).
 
-The source code below illustrates how PSGA _could_ fit in:
+The source code below illustrates how _PSGA_ _could_ fit in this _hello world_ example:
 1. Define a function that acts when the _Ok_ button is clicked.
 2. Instantiate the dispatcher that will trigger the handler whenever the _Ok_ event is fired.
 
 Note that this simple example does not use a `Controller`.
-Note that the `demos/hello_world.py` example does the same in a slightly different way.
+Note that the `demos/hello_world.py` example usage _PSGA_ in a slightly different way
+(all roads lead to Rome).
 
 ```python
 import PySimpleGUI as sg
@@ -75,9 +100,8 @@ window.close()
 
 ### Example with a Controller
 
-It shows PSGA's concept without using any PySimpleGUI functionality.
-It illustrates the use of a `Controller` in combination with
-the `action` decorator and a `Dispatcher`.
+It shows _PSGA_'s `Controller`, `action()` and `Dispatcher` concepts
+(without introducing any PySimpleGUI functionality).
 
 ```python
 from psga import Controller, Dispatcher, action
@@ -102,15 +126,28 @@ controller = _MyController(dispatcher)
 dispatcher.dispatch("universal_question", 42)
 assert controller.answer == 42
 
-QUESTION = "Answer to the Ultimate Question of Life"
+QUESTION = "What is the answer to the Ultimate Question of Life?"
 dispatcher.dispatch(controller.on_answer.name, QUESTION)
 assert controller.answer == QUESTION
 ```
 
 
+### Tabs and tables
+
+The `demo/tabs_and_tables` is a larger PySimpleGui example program.
+
+It shows 2 `sg.Tables`, each in a `sg.Tab`, that get their data from a Model.
+The model in turn uses REST requests to manage the data.
+Right-click for the context menu that allows to add or delete table rows.
+
+Notice how `main.py` is kept lean and clean.
+_PSGA_ simplifies the event processing in a single line of code: `dispatcher.loop(window)`.
+Each functional program part is succintly grouped in its Controller.
+
+
 ## For development
 
-Illustrates how to setup for _PSGA_ development.
+Following illustrates how to setup for _PSGA_ development.
 
 ```bash
 python3.11 -mvenv .venv
@@ -132,6 +169,7 @@ pytest
 export PYTHONPATH=src
 python demos/hello_world.py
 python demos/no_ui.py
+python demos/tabs_and_tables/main.py
 
 # build the wheel and upload to pypi.org (uses credentials in ~/.pypirc)
 rm -rf dist/
@@ -144,5 +182,4 @@ Note that on Mac OS one needs to install tkinter separately with _brew_:
 
 ```bash
 brew install python-tk@3.11
-brew install python-gdbm@3.11
 ```
